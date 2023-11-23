@@ -1,9 +1,6 @@
 package com.bridgelabz.SnakeAndLadderSimulator;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SnakeAndLadder {
     public static final int INITIAL_POSITION = 0;
@@ -80,7 +77,7 @@ public class SnakeAndLadder {
       @return: No explicit return value.
      */
     private void initializeSnakesAndLadders(){
-        int noOfLadders = getRandomValueInRange(1 , 15);
+        int noOfLadders = getRandomValueInRange(1 , 25);
         int noOfSnakes = getRandomValueInRange(1 , 15);
         LADDERS = generateLadderPositions(INITIAL_POSITION+1 , FINAL_POSITION , noOfLadders);
         SNAKES = generateSnakesPositions(INITIAL_POSITION , FINAL_POSITION-1 , noOfSnakes + noOfLadders);
@@ -119,13 +116,11 @@ public class SnakeAndLadder {
     public void updateCurrentPosition(int diceValue , String Movement){
         switch (Movement){
             case CLIMB_LADDER -> {
-                int finalPosition = LADDERS.get(CURRENT_POSITION+diceValue);
-                CURRENT_POSITION += finalPosition;
+                CURRENT_POSITION = LADDERS.get(CURRENT_POSITION+diceValue);
                 System.out.println("I took Ladder my position current position is " + CURRENT_POSITION);
             }
             case DESCEND_SNAKE -> {
-                int finalPosition = SNAKES.get(CURRENT_POSITION+diceValue);
-                CURRENT_POSITION += finalPosition;
+                CURRENT_POSITION = SNAKES.get(CURRENT_POSITION+diceValue);
                 System.out.println("I took Snake my position current position is " + CURRENT_POSITION);
             }
             case WALK_DICE_VALUE -> {
@@ -136,7 +131,6 @@ public class SnakeAndLadder {
                 System.out.println("No movement has happened");
             }
         }
-        CURRENT_POSITION += diceValue;
     }
 
 
@@ -162,6 +156,14 @@ public class SnakeAndLadder {
      */
     public String getUserChoiceForTheMove(int diceValue){
         int newPosition = CURRENT_POSITION + diceValue;
+        System.out.println("current position : " + CURRENT_POSITION + " , dice value : " + diceValue);
+        if(newPosition > FINAL_POSITION){
+            System.out.println("new position is greater than 100");
+            return STAY_CURRENT_POSITION;
+        }else if(newPosition == FINAL_POSITION){
+            System.out.println("new position is  100");
+            return WALK_DICE_VALUE;
+        }
         int chooseOne = (int)(Math.random()*2);
         if(LADDER_SNAKE_POSITIONS.contains(newPosition)){
             if (chooseOne == CHOOSE_MOVEMENT) {
@@ -170,7 +172,7 @@ public class SnakeAndLadder {
                 }
                 return DESCEND_SNAKE;
             }
-            return STAY_CURRENT_POSITION;
+            return WALK_DICE_VALUE;
         }else{
             if(chooseOne == CHOOSE_MOVEMENT){
                 return WALK_DICE_VALUE;
@@ -188,8 +190,17 @@ public class SnakeAndLadder {
 
      // use case 2 , roll the dice and update the current position
         int diceValue = playerOne.rollDice();
-     //use case 2 , get choice of user
+     //use case 3 , get choice of user
         String getChoice = playerOne.getUserChoiceForTheMove(diceValue);
         playerOne.updateCurrentPosition(diceValue , getChoice);
+       //use case 4 , loop until player wins
+        while(playerOne.CURRENT_POSITION < FINAL_POSITION){
+            diceValue = playerOne.rollDice();
+            getChoice = playerOne.getUserChoiceForTheMove(diceValue);
+            playerOne.updateCurrentPosition(diceValue , getChoice);
+        }
+        if(playerOne.CURRENT_POSITION == FINAL_POSITION){
+            System.out.println("won the game ");
+        }
     }
 }

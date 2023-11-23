@@ -193,7 +193,7 @@ public class SnakeAndLadder {
      //use case 3 , get choice of user
         String getChoice = playerOne.getUserChoiceForTheMove(diceValue);
         playerOne.updateCurrentPosition(diceValue , getChoice);
-       //use case 4 , loop until player wins
+       //use case 4,5 , loop until player wins and make sure reaches exact 100
         while(playerOne.CURRENT_POSITION < FINAL_POSITION){
             diceValue = playerOne.rollDice();
             getChoice = playerOne.getUserChoiceForTheMove(diceValue);

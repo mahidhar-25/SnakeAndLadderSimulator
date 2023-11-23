@@ -12,6 +12,7 @@ public class SnakeAndLadder {
     public static final int CHOOSE_MOVEMENT = 1;
     public static final int CHOOSE_STAY = 0;
     public int CURRENT_POSITION ;
+    public int NO_OF_TIMES_DICE_ROLLED;
     private HashMap<Integer, Integer> LADDERS;
     private HashMap<Integer, Integer> SNAKES;
     public Set<Integer> LADDER_SNAKE_POSITIONS;
@@ -114,6 +115,7 @@ public class SnakeAndLadder {
       @return: No explicit return value.
      */
     public void updateCurrentPosition(int diceValue , String Movement){
+        NO_OF_TIMES_DICE_ROLLED++;
         switch (Movement){
             case CLIMB_LADDER -> {
                 CURRENT_POSITION = LADDERS.get(CURRENT_POSITION+diceValue);
@@ -202,5 +204,7 @@ public class SnakeAndLadder {
         if(playerOne.CURRENT_POSITION == FINAL_POSITION){
             System.out.println("won the game ");
         }
+        //use case 6 , no of times dice rolled
+        System.out.println("total no of time dice rolled : " + playerOne.NO_OF_TIMES_DICE_ROLLED);
     }
 }

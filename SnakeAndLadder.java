@@ -11,11 +11,13 @@ public class SnakeAndLadder {
     public static final String WALK_DICE_VALUE = "Walk dice value";
     public static final int CHOOSE_MOVEMENT = 1;
     public static final int CHOOSE_STAY = 0;
+    public static final int PLAYER_ONE_MOVE = 0;
+    public static final int PLAYER_TWO_MOVE = 1;
     public int CURRENT_POSITION ;
     public int NO_OF_TIMES_DICE_ROLLED;
-    private HashMap<Integer, Integer> LADDERS;
-    private HashMap<Integer, Integer> SNAKES;
-    public Set<Integer> LADDER_SNAKE_POSITIONS;
+    private static HashMap<Integer, Integer> LADDERS;
+    private static HashMap<Integer, Integer> SNAKES;
+    public static Set<Integer> LADDER_SNAKE_POSITIONS;
 
     /*
     @desc : constructor , initializes the player with initial position
@@ -25,7 +27,6 @@ public class SnakeAndLadder {
 
     public SnakeAndLadder() {
         CURRENT_POSITION = INITIAL_POSITION;
-        initializeSnakesAndLadders();
     }
 
     /*
@@ -37,7 +38,7 @@ public class SnakeAndLadder {
         - count: The number of snakes to be generated.
       @return: A HashMap representing the positions of ladders, where the key is the start position and the value is the end position.
      */
-    private HashMap<Integer, Integer> generateLadderPositions(int min, int max, int count) {
+    private static HashMap<Integer, Integer> generateLadderPositions(int min, int max, int count) {
          LADDER_SNAKE_POSITIONS = new HashSet<>();
         HashMap<Integer, Integer>ladders = new HashMap<>();
         while (LADDER_SNAKE_POSITIONS.size() < count) {
@@ -59,7 +60,7 @@ public class SnakeAndLadder {
         - count: The number of snakes to be generated.
       @return: A HashMap representing the positions of snakes, where the key is the start position and the value is the end position.
      */
-    private HashMap<Integer, Integer> generateSnakesPositions(int min, int max, int count) {
+    private static HashMap<Integer, Integer> generateSnakesPositions(int min, int max, int count) {
         LADDER_SNAKE_POSITIONS = new HashSet<>();
         HashMap<Integer, Integer>snakes = new HashMap<>();
         while (LADDER_SNAKE_POSITIONS.size() < count) {
@@ -77,7 +78,7 @@ public class SnakeAndLadder {
       @params: No explicit parameters.
       @return: No explicit return value.
      */
-    private void initializeSnakesAndLadders(){
+    public static void initializeSnakesAndLadders(){
         int noOfLadders = getRandomValueInRange(1 , 25);
         int noOfSnakes = getRandomValueInRange(1 , 15);
         LADDERS = generateLadderPositions(INITIAL_POSITION+1 , FINAL_POSITION , noOfLadders);
@@ -90,13 +91,17 @@ public class SnakeAndLadder {
             System.out.println("Key: " + e.getKey()+ " Value: " + e.getValue());
 
     }
+    /*
+ @desc : constructor , initializes the player with initial position
+ @params : integer to assign the current position
+ @return : no return
+ */
     public SnakeAndLadder(int start) {
         if (start > 0 && start <= FINAL_POSITION) {
             CURRENT_POSITION = start;
         } else {
             CURRENT_POSITION = INITIAL_POSITION;
         }
-        initializeSnakesAndLadders();
     }
 
     /*
@@ -142,7 +147,7 @@ public class SnakeAndLadder {
               end - the upper bound of the range.
       @return: An integer representing a random value within the specified range.
      */
-    public int getRandomValueInRange(int start , int end){
+    public static int getRandomValueInRange(int start, int end){
         return ((int)(Math.random()*(end - start)) + start);
     }
 
@@ -187,24 +192,52 @@ public class SnakeAndLadder {
     public static void main(String[] args) {
         System.out.println("!!! Snake And Ladder Simulator !!!");
      // use case 1 , initialize player one at 0
+        initializeSnakesAndLadders();
         SnakeAndLadder playerOne = new SnakeAndLadder();
-        System.out.println("current position of player one : " + playerOne.CURRENT_POSITION);
-
+        SnakeAndLadder playerTwo = new SnakeAndLadder();
+/*
      // use case 2 , roll the dice and update the current position
         int diceValue = playerOne.rollDice();
      //use case 3 , get choice of user
         String getChoice = playerOne.getUserChoiceForTheMove(diceValue);
         playerOne.updateCurrentPosition(diceValue , getChoice);
+
+        */
+        int diceValue;
+        String getChoice;
+     int move = (int)(Math.random()*2);
        //use case 4,5 , loop until player wins and make sure reaches exact 100
-        while(playerOne.CURRENT_POSITION < FINAL_POSITION){
-            diceValue = playerOne.rollDice();
-            getChoice = playerOne.getUserChoiceForTheMove(diceValue);
-            playerOne.updateCurrentPosition(diceValue , getChoice);
+        while(playerOne.CURRENT_POSITION < FINAL_POSITION || playerTwo.CURRENT_POSITION < FINAL_POSITION){
+            switch(move){
+                case PLAYER_ONE_MOVE -> {
+                    System.out.println("Player 1 move : ");
+                    diceValue = playerOne.rollDice();
+                    getChoice = playerOne.getUserChoiceForTheMove(diceValue);
+                    playerOne.updateCurrentPosition(diceValue , getChoice);
+                    if(!getChoice.equals(CLIMB_LADDER)){
+                        move = PLAYER_TWO_MOVE;
+                    }
+                }
+                case PLAYER_TWO_MOVE -> {
+                    System.out.println("Player 2 move : ");
+                    diceValue = playerTwo.rollDice();
+                    getChoice = playerTwo.getUserChoiceForTheMove(diceValue);
+                    playerTwo.updateCurrentPosition(diceValue , getChoice);
+                    if(!getChoice.equals(CLIMB_LADDER)){
+                        move = PLAYER_ONE_MOVE;
+                    }
+                }
+                default -> System.out.println("No player started the game");
+            }
         }
         if(playerOne.CURRENT_POSITION == FINAL_POSITION){
-            System.out.println("won the game ");
+            System.out.println("Player one won the game ");
+        }else if(playerTwo.CURRENT_POSITION == FINAL_POSITION){
+            System.out.println("Player two won the game");
+
         }
         //use case 6 , no of times dice rolled
-        System.out.println("total no of time dice rolled : " + playerOne.NO_OF_TIMES_DICE_ROLLED);
+        System.out.println("total no of time dice rolled by player one: " + playerOne.NO_OF_TIMES_DICE_ROLLED);
+        System.out.println("total no of time dice rolled by player two : " + playerTwo.NO_OF_TIMES_DICE_ROLLED);
     }
 }

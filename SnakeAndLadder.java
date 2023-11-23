@@ -22,10 +22,33 @@ public class SnakeAndLadder {
         }
     }
 
+    /*
+    @desc : it rolls the dice and generates a random value from 1 to 6
+    @param : no params required
+    @return : return an integer value of dice rolled
+     */
+    public int rollDice(){
+        return (int)(Math.random()*6) + 1;
+    }
+
+    /*
+   @desc : it updates the current position , after dice rolled
+   @param : integer value is passed rolling the dice
+   @return : it won't return , it updates the position
+    */
+    public void updateCurrentPosition(int diceValue){
+        CURRENT_POSITION += diceValue;
+    }
+
     public static void main(String[] args) {
         System.out.println("!!! Snake And Ladder Simulator !!!");
-// use case 1 , initialize player one at 0
+     // use case 1 , initialize player one at 0
         SnakeAndLadder playerOne = new SnakeAndLadder();
+        System.out.println("current position of player one : " + playerOne.CURRENT_POSITION);
+
+     // use case 2 , roll the dice and update the current position
+        int diceValue = playerOne.rollDice();
+        playerOne.updateCurrentPosition(diceValue);
         System.out.println("current position of player one : " + playerOne.CURRENT_POSITION);
     }
 }

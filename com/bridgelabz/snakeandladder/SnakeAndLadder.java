@@ -1,7 +1,39 @@
-package com.bridgelabz.SnakeAndLadderSimulator;
+package com.bridgelabz.snakeandladder;
 
 import java.util.*;
+/*
+@desc :
 
+# SnakeAndLadder Class
+The SnakeAndLadder class is a Java program representing a simple implementation of the Snake and Ladder game.
+It incorporates the rules and functionalities of the classic game played on a board with numbered squares.
+
+Constants:
+
+INITIAL_POSITION: Represents the starting position of the player.
+FINAL_POSITION: Represents the final position or the winning position of the player.
+CLIMB_LADDER, DESCEND_SNAKE, STAY_CURRENT_POSITION, WALK_DICE_VALUE: Constants for different movements in the game.
+CHOOSE_MOVEMENT, CHOOSE_STAY: Constants used for decision-making during the game.
+PLAYER_ONE_MOVE, PLAYER_TWO_MOVE: Constants representing player moves.
+LADDERS, SNAKES: HashMaps containing positions of ladders and snakes on the board.
+LADDER_SNAKE_POSITIONS: Set containing positions of both ladders and snakes to ensure unique positions.
+
+Constructors:
+
+public SnakeAndLadder(): Initializes a player with the default initial position.
+public SnakeAndLadder(int start): Initializes a player with a specified initial position.
+
+Methods:
+private static HashMap<Integer, Integer> generateLadderPositions(int min, int max, int count): Generates random positions for ladders on the game board.
+private static HashMap<Integer, Integer> generateSnakesPositions(int min, int max, int count): Generates random positions for snakes on the game board.
+public static void initializeSnakesAndLadders(): Randomly generates the number of ladders and snakes and their positions on the board.
+public int rollDice(): Simulates rolling a dice and returns a random value between 1 and 6.
+public void updateCurrentPosition(int diceValue, String movement): Updates the player's current position based on the dice value and the chosen movement.
+public String getUserChoiceForTheMove(int diceValue): Determines the player's choice of movement based on the given dice value, current position, and the presence of ladders or snakes.
+
+Usage:
+The class can be used to create instances of the Snake and Ladder game, roll the dice, and simulate player movements.
+ */
 public class SnakeAndLadder {
     public static final int INITIAL_POSITION = 0;
     public static final int FINAL_POSITION = 100;
@@ -189,55 +221,5 @@ public class SnakeAndLadder {
 
         }
     }
-    public static void main(String[] args) {
-        System.out.println("!!! Snake And Ladder Simulator !!!");
-     // use case 1 , initialize player one at 0
-        initializeSnakesAndLadders();
-        SnakeAndLadder playerOne = new SnakeAndLadder();
-        SnakeAndLadder playerTwo = new SnakeAndLadder();
-/*
-     // use case 2 , roll the dice and update the current position
-        int diceValue = playerOne.rollDice();
-     //use case 3 , get choice of user
-        String getChoice = playerOne.getUserChoiceForTheMove(diceValue);
-        playerOne.updateCurrentPosition(diceValue , getChoice);
 
-        */
-        int diceValue;
-        String getChoice;
-     int move = (int)(Math.random()*2);
-       //use case 4,5 , loop until player wins and make sure reaches exact 100
-        while(playerOne.CURRENT_POSITION < FINAL_POSITION || playerTwo.CURRENT_POSITION < FINAL_POSITION){
-            switch(move){
-                case PLAYER_ONE_MOVE -> {
-                    System.out.println("Player 1 move : ");
-                    diceValue = playerOne.rollDice();
-                    getChoice = playerOne.getUserChoiceForTheMove(diceValue);
-                    playerOne.updateCurrentPosition(diceValue , getChoice);
-                    if(!getChoice.equals(CLIMB_LADDER)){
-                        move = PLAYER_TWO_MOVE;
-                    }
-                }
-                case PLAYER_TWO_MOVE -> {
-                    System.out.println("Player 2 move : ");
-                    diceValue = playerTwo.rollDice();
-                    getChoice = playerTwo.getUserChoiceForTheMove(diceValue);
-                    playerTwo.updateCurrentPosition(diceValue , getChoice);
-                    if(!getChoice.equals(CLIMB_LADDER)){
-                        move = PLAYER_ONE_MOVE;
-                    }
-                }
-                default -> System.out.println("No player started the game");
-            }
-        }
-        if(playerOne.CURRENT_POSITION == FINAL_POSITION){
-            System.out.println("Player one won the game ");
-        }else if(playerTwo.CURRENT_POSITION == FINAL_POSITION){
-            System.out.println("Player two won the game");
-
-        }
-        //use case 6 , no of times dice rolled
-        System.out.println("total no of time dice rolled by player one: " + playerOne.NO_OF_TIMES_DICE_ROLLED);
-        System.out.println("total no of time dice rolled by player two : " + playerTwo.NO_OF_TIMES_DICE_ROLLED);
-    }
 }
